@@ -1,0 +1,16 @@
+import 
+---> from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+	from chatterbot import ChatBot
+install
+---->pip install python-telegram-bot
+API
+----> updater = Updater("YOUR_TELEGRAM_BOT_TOKEN", use_context=True)
+Create a new bot with BotFather:
+
+a. Open Telegram and search for the BotFather bot.
+
+b. Start a chat with BotFather by clicking on the "Start" button.
+
+c. Use the /newbot command to create a new bot. BotFather will guide you through the process, asking for a name and username for your bot.
+
+d. Once you've provided a name and username, BotFather will give you a token for your bot. This token is your bot's API token, which you'll use to authenticate with the Telegram Bot API.
