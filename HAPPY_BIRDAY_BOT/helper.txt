@@ -1,0 +1,7 @@
+important
+--> pip install pywhatkit
+>> pip install selenium
+    
+ --> pip install --upgrade pywhatkit : if you want to send message automaticlly
+
+NOTE :  please change this good if you want to become a best developer 🔥
