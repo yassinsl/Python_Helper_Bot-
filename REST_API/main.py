@@ -1,54 +1,53 @@
 from typing import Dict, Any
 import time
 import requests
+import os
 
 ttl_seconds = 600
 cache: Dict[str, Dict[str, Any]] = {}
 
 Methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "CONNECT", "TRACE"]
 
-
 def handle_get(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
     now = time.time()
-
-    # 1) Cache HIT (fresh)
     if cache_key in cache:
         entry = cache[cache_key]
         if now < entry["expires_at"]:
             print("CACHE HIT")
             print(entry["data"])
             return
-
-    # 2) Cache MISS or STALE => request
     response = requests.get(endpoint, params=params, timeout=15)
-
     if not response.ok:
         raise ValueError(f"HTTP {response.status_code} {response.reason}")
-
     data = response.json()
-
-    # 3) Store in cache
     saved_at = time.time()
     cache[cache_key] = {
         "data": data,
         "saved_at": saved_at,
         "expires_at": saved_at + ttl_seconds,
     }
-
     print("CACHE MISS (fetched)")
     print(data)
 
-
 def handel_post(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    raise ValueError("POST not implemented yet")
-
+    headers : Dict[str, Any] = {}
+    API_KEY : str = os.getenv("KEY"); 
+    if not API_KEY: 
+        raise ValueError(F"Empty API KEY") 
+    API_KEY = 
+    Authorization : str = f"Bearer {API_KEY}"
+    headers['Authorization'] = Authorization
+    headers['Content-Type'] = 'application/json'
+    response = requests.post(endpoint, json=params, headers=headers);
+    if response.status_code >= 400:
+        raise ValueError(f"requests Failed with the code status {response.status_code} : {response.reason}")
+    else : print(f"DATA: Success {response.json()}")
 
 def handel_put(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    raise ValueError("PUT not implemented yet")
-
+    pass
 
 def handel_delete(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    raise ValueError("DELETE not implemented yet")
+    pass
 
 
 def handel_head(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
@@ -114,8 +113,8 @@ def main() -> None:
 
         cache_key = Build_key_request(method, endpoint, params)
         handel_and_display_data(cache_key, method, endpoint, params)
-
     except ValueError as e:
+
         print(f"Error: {e}")
 
 if __name__ == "__main__":
