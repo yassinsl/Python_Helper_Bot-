@@ -6,7 +6,7 @@ import os
 ttl_seconds = 600
 cache: Dict[str, Dict[str, Any]] = {}
 
-Methods = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "CONNECT", "TRACE"]
+Methods = ["GET", "POST", "PUT", "DELETE"] 
 
 def handle_get(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
     now = time.time()
@@ -32,9 +32,9 @@ def handle_get(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
 def handel_post(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
     headers : Dict[str, Any] = {}
     API_KEY : str = os.getenv("KEY"); 
+    API_KEY = API_KEY.strip()
     if not API_KEY: 
-        raise ValueError(F"Empty API KEY") 
-    API_KEY = 
+        raise ValueError(F"Empty API KEY")  
     Authorization : str = f"Bearer {API_KEY}"
     headers['Authorization'] = Authorization
     headers['Content-Type'] = 'application/json'
@@ -43,30 +43,38 @@ def handel_post(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
         raise ValueError(f"requests Failed with the code status {response.status_code} : {response.reason}")
     else : print(f"DATA: Success {response.json()}")
 
-def handel_put(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    pass
-
+def handel_put(cache_key: str, endpoint: str, params: Dict[str, str]) -> None: 
+    API_KEY = os.getenv("Key");
+    headers = {
+            "Authorization" : f"Bearer {API_KEY}",
+            "Content-Type" : "application/jason",
+            "accept" : "application/jason"
+            }
+    response = requests.put(endpoint, jason=params, headers=headers);
+    if response.ok:
+        data = response.jason();
+        print(f"Success {data}");
+    else :
+        raise ValueError(f"requests Failed with the code status {response.status_code} : {response.reason}")
+             
 def handel_delete(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    pass
+    API_KEY = os.getenv("Key");
+    headers = {
+            "Authorization" : f"Bearer {API_KEY}",
+            "accept" : "application/"
+            }
+    response = requests.delete(endpoint, headers=headers);
+    if response.status_code == 200 or response.status_code == 204:
+        print(f"seccuss")
+    else :
+        raise ValueError(f"requests Failed with the code status {response.status_code} : {response.reason}")
 
-
-def handel_head(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    pass
-def handel_options(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    pass
-def handel_connect(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
-    pass
-def handel_trace(cache_key: str, endpoint: str, params: Dict[str, str]) -> None:
     pass
 METHODS_DISPATCH = {
     "GET": handle_get,
     "POST": handel_post,
     "PUT": handel_put,
     "DELETE": handel_delete,
-    "HEAD": handel_head,
-    "OPTIONS": handel_options,
-    "CONNECT": handel_connect,
-    "TRACE": handel_trace,
 }
 
 def handel_and_display_data(cache_key: str, method: str, endpoint: str, params: Dict[str, str]) -> None:
